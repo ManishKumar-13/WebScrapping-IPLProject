@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPL Player Statistics</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f4f7;
+      color: #333;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    h1 {
+      font-weight: bold;
+      color: #ff4500;
+    }
+
+    .container {
+      background: linear-gradient(135deg, #f0f4f7 50%, #ff4500 50%);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    canvas {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-container {
+      position: relative;
+      height: 400px;
+      width: 100%;
+    }
+
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">IPL Player Statistics</h1>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="chart-container">
+          <canvas id="runsChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 IPL Stats. All rights reserved.</p>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    fetch('/data')
+      .then(response => response.json())
+      .then(data => {
+        const names = data.map(player => player.name);
+        const runs = data.map(player => parseInt(player.runs));
+
+        const ctx1 = document.getElementById('runsChart').getContext('2d');
+        new Chart(ctx1, {
+          type: 'bar',
+          data: {
+            labels: names,
+            datasets: [{
+              label: 'Runs',
+              data: runs,
+              backgroundColor: '#ff4500',
+              borderColor: '#333',
+              borderWidth: 1,
+              hoverBackgroundColor: '#ffa07a',
+              hoverBorderColor: '#ff4500'
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  color: '#333',
+                  font: {
+                    size: 14
+                  }
+                },
+                grid: {
+                  color: '#ccc'
+                }
+              },
+              x: {
+                ticks: {
+                  color: '#333',
+                  font: {
+                    size: 14
+                  }
+                },
+                grid: {
+                  color: '#ccc'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: false
+              }
+            }
+          }
+        });
+      });
+  </script>
+</body>
+
+</html>
